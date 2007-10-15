@@ -84,11 +84,12 @@ lego:SetScript("OnEnter", function(self)
 
 	local cur = UnitXP("player")
 
-	GameTooltip:AddDoubleLine("EXP:", cur.."/"..max)
-	GameTooltip:AddDoubleLine("TNL:", max-cur)
-	GameTooltip:AddLine(string.format("%.1f hours played this session", (GetTime()-starttime)/3600))
-	GameTooltip:AddLine((cur - start).." EXP gained this session")
-	GameTooltip:AddLine(string.format("%.1f levels gained this session", UnitLevel("player") + cur/max - startlevel))
+	GameTooltip:AddDoubleLine("EXP:", cur.."/"..max, nil,nil,nil, 1,1,1)
+	GameTooltip:AddDoubleLine("Rest:", string.format("%d%%", (GetXPExhaustion() or 0)/max*100), nil,nil,nil, 1,1,1)
+	GameTooltip:AddDoubleLine("TNL:", max-cur, nil,nil,nil, 1,1,1)
+	GameTooltip:AddLine(string.format("%.1f hours played this session", (GetTime()-starttime)/3600), 1,1,1)
+	GameTooltip:AddLine((cur - start).." EXP gained this session", 1,1,1)
+	GameTooltip:AddLine(string.format("%.1f levels gained this session", UnitLevel("player") + cur/max - startlevel), 1,1,1)
 
 	GameTooltip:Show()
 end)
