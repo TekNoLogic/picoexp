@@ -1,0 +1,18 @@
+## Interface: 20200
+
+## Title: EXP Block
+## Notes: Minimalistic LegoBlock-based EXP display
+## Author: Tekkub Stoutwrithe
+## Version: Alpha
+
+## OptionalDeps: Dongle
+
+## SavedVariables: EXPBlockDB
+
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+
+Dongle.lua
+LegoBlock.lua
+
+EXPBlock.lua
