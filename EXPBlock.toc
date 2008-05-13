@@ -1,11 +1,9 @@
 ## Interface: 20400
 
 ## Title: EXP Block
-## Notes: Minimalistic LegoBlock-based EXP display
+## Notes: Minimalistic EXP display
 ## Author: Tekkub Stoutwrithe
 ## Version: Alpha
-
-## OptionalDeps: Dongle
 
 ## SavedVariables: EXPBlockDB
 
@@ -15,7 +13,6 @@
 LibStub.lua
 CallbackHandler-1.0.lua
 LibDataBroker-1.1\LibDataBroker-1.1.lua
-Dongle.lua
-LegoBlock.lua
+tekBlock.lua
 
 EXPBlock.lua

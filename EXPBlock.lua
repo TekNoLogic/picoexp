@@ -4,17 +4,18 @@
 --      Are you local?      --
 ------------------------------
 
-local start, max, starttime, startlevel
+local start, max, starttime, startlevel, block
 
 
 -------------------------------------------
 --      Namespace and all that shit      --
 -------------------------------------------
 
-EXPBlock = DongleStub("Dongle-1.0"):New("EXPBlock")
-local lego = DongleStub("LegoBlock-Beta0"):New("EXPBlock", "99%", "Interface\\Addons\\EXPBlock\\icon")
+local f = CreateFrame("frame")
+f:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
+f:RegisterEvent("ADDON_LOADED")
+
 local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("EXPBlock")
-dataobj.icon = "Interface\\Addons\\EXPBlock\\icon"
 dataobj.text = "99%"
 
 
@@ -22,32 +23,32 @@ dataobj.text = "99%"
 --      Init/Enable      --
 ---------------------------
 
-function EXPBlock:Initialize()
-	local blockdefaults = {
-		locked = false,
-		showIcon = false,
-		showText = true,
-		shown = true,
-		noresize = true,
-		width = 46,
-	}
+function f:ADDON_LOADED(event, addon)
+	if addon ~= "EXPBlock" then return end
 
-	self.db = self:InitializeDB("EXPBlockDB", {profile = {block = blockdefaults}}, "global")
+	if EXPBlockDB and EXPBlockDB.profiles then EXPBlockDB = nil end
+	EXPBlockDB = EXPBlockDB or {}
+
+	block = LibStub:GetLibrary("tekBlock"):new("EXPBlock", EXPBlockDB)
+
+	f:UnregisterEvent("ADDON_LOADED")
+	f.ADDON_LOADED = nil
+
+	if IsLoggedIn() then self:PLAYER_LOGIN() else self:RegisterEvent("PLAYER_LOGIN") end
 end
 
 
-function EXPBlock:Enable()
-	lego:SetDB(self.db.profile.block)
-
+function f:PLAYER_LOGIN()
 	start, max, starttime = UnitXP("player"), UnitXPMax("player"), GetTime()
 	startlevel = UnitLevel("player") + start/max
 
 	self:RegisterEvent("PLAYER_XP_UPDATE")
 	self:RegisterEvent("PLAYER_LEVEL_UP")
 
-	LibStub:GetLibrary("LibDataBroker-1.1").RegisterCallback(self, "LibDataBroker_AttributeChanged_EXPBlock_text", "TextUpdate")
-
 	self:PLAYER_XP_UPDATE()
+
+	self:UnregisterEvent("PLAYER_LOGIN")
+	self.PLAYER_LOGIN = nil
 end
 
 
@@ -55,17 +56,12 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function EXPBlock:PLAYER_XP_UPDATE()
+function f:PLAYER_XP_UPDATE()
 	dataobj.text = string.format("%d%%", UnitXP("player")/UnitXPMax("player")*100)
 end
 
 
-function EXPBlock:TextUpdate(event, name, key, value)
-	lego:SetText(value)
-end
-
-
-function EXPBlock:PLAYER_LEVEL_UP()
+function f:PLAYER_LEVEL_UP()
 	start = start - max
 	max = UnitXPMax("player")
 end
@@ -78,14 +74,14 @@ end
 local function GetTipAnchor(frame)
 	local x,y = frame:GetCenter()
 	if not x or not y then return "TOPLEFT", "BOTTOMLEFT" end
-	local hhalf = (x > UIParent:GetWidth()/2) and "RIGHT" or "LEFT"
+	local hhalf = (x > UIParent:GetWidth()*2/3) and "RIGHT" or (x < UIParent:GetWidth()/3) and "LEFT" or ""
 	local vhalf = (y > UIParent:GetHeight()/2) and "TOP" or "BOTTOM"
 	return vhalf..hhalf, frame, (vhalf == "TOP" and "BOTTOM" or "TOP")..hhalf
 end
 
 
-local function OnLeave() GameTooltip:Hide() end
-local function OnEnter(self)
+function dataobj.OnLeave() GameTooltip:Hide() end
+function dataobj.OnEnter(self)
  	GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint(GetTipAnchor(self))
 	GameTooltip:ClearLines()
@@ -103,9 +99,3 @@ local function OnEnter(self)
 
 	GameTooltip:Show()
 end
-
-
-lego:SetScript("OnEnter", OnEnter)
-lego:SetScript("OnLeave", OnLeave)
-dataobj.OnEnter = OnEnter
-dataobj.OnLeave = OnLeave
