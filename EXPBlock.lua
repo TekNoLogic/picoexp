@@ -13,6 +13,9 @@ local start, max, starttime, startlevel
 
 EXPBlock = DongleStub("Dongle-1.0"):New("EXPBlock")
 local lego = DongleStub("LegoBlock-Beta0"):New("EXPBlock", "99%", "Interface\\Addons\\EXPBlock\\icon")
+local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("EXPBlock")
+dataobj.icon = "Interface\\Addons\\EXPBlock\\icon"
+dataobj.text = "99%"
 
 
 ---------------------------
@@ -42,6 +45,8 @@ function EXPBlock:Enable()
 	self:RegisterEvent("PLAYER_XP_UPDATE")
 	self:RegisterEvent("PLAYER_LEVEL_UP")
 
+	LibStub:GetLibrary("LibDataBroker-1.1").RegisterCallback(self, "LibDataBroker_AttributeChanged_EXPBlock_text", "TextUpdate")
+
 	self:PLAYER_XP_UPDATE()
 end
 
@@ -51,7 +56,12 @@ end
 ------------------------------
 
 function EXPBlock:PLAYER_XP_UPDATE()
-	lego:SetText(string.format("%d%%", UnitXP("player")/UnitXPMax("player")*100))
+	dataobj.text = string.format("%d%%", UnitXP("player")/UnitXPMax("player")*100)
+end
+
+
+function EXPBlock:TextUpdate(event, name, key, value)
+	lego:SetText(value)
 end
 
 
@@ -74,8 +84,8 @@ local function GetTipAnchor(frame)
 end
 
 
-lego:SetScript("OnLeave", function() GameTooltip:Hide() end)
-lego:SetScript("OnEnter", function(self)
+local function OnLeave() GameTooltip:Hide() end
+local function OnEnter(self)
  	GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint(GetTipAnchor(self))
 	GameTooltip:ClearLines()
@@ -92,5 +102,10 @@ lego:SetScript("OnEnter", function(self)
 	GameTooltip:AddLine(string.format("%.1f levels gained this session", UnitLevel("player") + cur/max - startlevel), 1,1,1)
 
 	GameTooltip:Show()
-end)
+end
 
+
+lego:SetScript("OnEnter", OnEnter)
+lego:SetScript("OnLeave", OnLeave)
+dataobj.OnEnter = OnEnter
+dataobj.OnLeave = OnLeave
