@@ -4,7 +4,7 @@
 --      Are you local?      --
 ------------------------------
 
-local start, max, starttime, startlevel, block
+local start, max, starttime, startlevel
 
 
 -------------------------------------------
@@ -13,29 +13,12 @@ local start, max, starttime, startlevel, block
 
 local f = CreateFrame("frame")
 f:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
-f:RegisterEvent("ADDON_LOADED")
-
-local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("EXPBlock")
-dataobj.text = "99%"
+local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("picoEXP", {text = "99%"})
 
 
----------------------------
---      Init/Enable      --
----------------------------
-
-function f:ADDON_LOADED(event, addon)
-	if addon ~= "EXPBlock" then return end
-
-	if EXPBlockDB and EXPBlockDB.profiles then EXPBlockDB = nil end
-	EXPBlockDB = EXPBlockDB or {}
-
-	block = LibStub:GetLibrary("tekBlock"):new("EXPBlock", EXPBlockDB)
-
-	f:UnregisterEvent("ADDON_LOADED")
-	f.ADDON_LOADED = nil
-
-	if IsLoggedIn() then self:PLAYER_LOGIN() else self:RegisterEvent("PLAYER_LOGIN") end
-end
+----------------------
+--      Enable      --
+----------------------
 
 
 function f:PLAYER_LOGIN()
@@ -86,7 +69,7 @@ function dataobj.OnEnter(self)
 	GameTooltip:SetPoint(GetTipAnchor(self))
 	GameTooltip:ClearLines()
 
-	GameTooltip:AddLine("EXPBlock")
+	GameTooltip:AddLine("picoEXP")
 
 	local cur = UnitXP("player")
 
@@ -99,3 +82,5 @@ function dataobj.OnEnter(self)
 
 	GameTooltip:Show()
 end
+
+if IsLoggedIn() then f:PLAYER_LOGIN() else f:RegisterEvent("PLAYER_LOGIN") end

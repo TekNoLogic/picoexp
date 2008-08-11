@@ -1,13 +1,11 @@
 ## Interface: 20400
 
-## Title: EXP Block
-## Notes: Minimalistic EXP display
+## Title: picoEXP
+## Notes: LDB EXP data feed
 ## Author: Tekkub Stoutwrithe
 ## Version: Alpha
 ## X-Website: http://www.tekkub.net/
 ## X-Email: tekkub-wow@googlegroups.com
-
-## SavedVariables: EXPBlockDB
 
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
@@ -17,4 +15,4 @@ CallbackHandler-1.0.lua
 LibDataBroker-1.1\LibDataBroker-1.1.lua
 tekBlock\tekBlock.lua
 
-EXPBlock.lua
+picoEXP.lua
