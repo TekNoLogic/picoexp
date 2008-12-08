@@ -13,7 +13,7 @@ local start, max, starttime, startlevel
 
 local f = CreateFrame("frame")
 f:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
-local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("picoEXP", {text = "99%", icon = "Interface\\AddOns\\picoEXP\\icon"})
+local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("picoEXP", {type = "data source", text = "99%", icon = "Interface\\AddOns\\picoEXP\\icon"})
 
 
 ----------------------
