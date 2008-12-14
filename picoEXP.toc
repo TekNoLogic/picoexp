@@ -3,7 +3,7 @@
 ## Title: picoEXP
 ## Notes: LDB EXP data feed
 ## Author: Tekkub Stoutwrithe
-## Version: Alpha
+## Version: 3.0.3.2
 ## X-Website: http://www.tekkub.net/
 ## X-Email: tekkub-wow@googlegroups.com
 
