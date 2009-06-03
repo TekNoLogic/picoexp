@@ -4,7 +4,7 @@
 --      Are you local?      --
 ------------------------------
 
-local start, max, starttime, startlevel
+local start, cur, max, starttime, startlevel
 
 
 -------------------------------------------
@@ -23,6 +23,7 @@ local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("picoEXP",
 
 function f:PLAYER_LOGIN()
 	start, max, starttime = UnitXP("player"), UnitXPMax("player"), GetTime()
+	cur = start
 	startlevel = UnitLevel("player") + start/max
 
 	self:RegisterEvent("PLAYER_XP_UPDATE")
@@ -40,13 +41,14 @@ end
 ------------------------------
 
 function f:PLAYER_XP_UPDATE()
-	dataobj.text = string.format("%d%%", UnitXP("player")/UnitXPMax("player")*100)
+	cur = UnitXP("player")
+	max = UnitXPMax("player")
+	dataobj.text = string.format("%d%%", cur/max*100)
 end
 
 
 function f:PLAYER_LEVEL_UP()
 	start = start - max
-	max = UnitXPMax("player")
 end
 
 
@@ -70,8 +72,6 @@ function dataobj.OnEnter(self)
 	GameTooltip:ClearLines()
 
 	GameTooltip:AddLine("picoEXP")
-
-	local cur = UnitXP("player")
 
 	GameTooltip:AddDoubleLine("EXP:", cur.."/"..max, nil,nil,nil, 1,1,1)
 	GameTooltip:AddDoubleLine("Rest:", string.format("%d%%", (GetXPExhaustion() or 0)/max*100), nil,nil,nil, 1,1,1)
