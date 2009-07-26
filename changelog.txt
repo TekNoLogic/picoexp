@@ -1,3 +1,7 @@
+3.1.0.3-Release
+    More decimal places!
+    Fix error with MaxXP on tooltip being incorrect. (Thanks lowlee)
+
 3.0.3.2-Release
     LDB type
 
