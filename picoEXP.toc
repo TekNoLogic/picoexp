@@ -2,6 +2,7 @@
 
 ## Title: picoEXP
 ## Notes: LDB EXP data feed
+## Notes-koKR: LDB에 경험치 데이터를 피드합니다.
 ## Author: Tekkub Stoutwrithe
 ## Version: Alpha
 ## X-Website: http://www.tekkub.net/
@@ -15,4 +16,5 @@ CallbackHandler-1.0.lua
 LibDataBroker-1.1\LibDataBroker-1.1.lua
 tekBlock\tekBlock.lua
 
+Locale.lua
 picoEXP.lua
