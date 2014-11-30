@@ -41,9 +41,13 @@ end
 ------------------------------
 
 function f:PLAYER_XP_UPDATE()
-	cur = UnitXP("player")
-	max = UnitXPMax("player")
-	dataobj.text = string.format("%d%%", cur/max*100)
+	if IsXPUserDisabled() then
+		dataobj.text = "(×_×)"
+	else
+		cur = UnitXP("player")
+		max = UnitXPMax("player")
+		dataobj.text = string.format("%d%%", cur/max*100)
+	end
 end
 
 
