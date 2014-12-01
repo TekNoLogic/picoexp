@@ -81,6 +81,10 @@ function dataobj.OnEnter(self)
 
 	GameTooltip:AddLine("picoEXP")
 
+	if IsXPUserDisabled() then
+		GameTooltip:AddLine("Experience gain is currently disabled", 1,0.125,0.125)
+	end
+
 	GameTooltip:AddDoubleLine(L["EXP:"], cur.."/"..max, nil,nil,nil, 1,1,1)
 	GameTooltip:AddDoubleLine(L["Rest:"], string.format("%d%%", (GetXPExhaustion() or 0)/max*100), nil,nil,nil, 1,1,1)
 	GameTooltip:AddDoubleLine(L["TNL:"], max-cur, nil,nil,nil, 1,1,1)
