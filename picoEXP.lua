@@ -33,6 +33,8 @@ function ns.OnLogin()
 
 	ns.RegisterEvent("PLAYER_XP_UPDATE")
 	ns.RegisterEvent("PLAYER_LEVEL_UP")
+	ns.RegisterEvent("DISABLE_XP_GAIN", ns.PLAYER_XP_UPDATE)
+	ns.RegisterEvent("ENABLE_XP_GAIN", ns.PLAYER_XP_UPDATE)
 
 	ns.PLAYER_XP_UPDATE()
 end
