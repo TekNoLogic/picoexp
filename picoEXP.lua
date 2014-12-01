@@ -13,9 +13,12 @@ local L = ns.L
 --      Namespace and all that shit      --
 -------------------------------------------
 
-local f = CreateFrame("frame")
-f:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
-local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("picoEXP", {type = "data source", text = "99%", icon = "Interface\\AddOns\\picoEXP\\icon"})
+local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
+local dataobj = LDB:NewDataObject("picoEXP", {
+	type = "data source",
+	text = "99%",
+	icon = "Interface\\AddOns\\picoEXP\\icon",
+})
 
 
 ----------------------
@@ -23,18 +26,15 @@ local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("picoEXP",
 ----------------------
 
 
-function f:PLAYER_LOGIN()
+function ns.OnLogin()
 	start, max, starttime = UnitXP("player"), UnitXPMax("player"), GetTime()
 	cur = start
 	startlevel = UnitLevel("player") + start/max
 
-	self:RegisterEvent("PLAYER_XP_UPDATE")
-	self:RegisterEvent("PLAYER_LEVEL_UP")
+	ns.RegisterEvent("PLAYER_XP_UPDATE")
+	ns.RegisterEvent("PLAYER_LEVEL_UP")
 
-	self:PLAYER_XP_UPDATE()
-
-	self:UnregisterEvent("PLAYER_LOGIN")
-	self.PLAYER_LOGIN = nil
+	ns.PLAYER_XP_UPDATE()
 end
 
 
@@ -42,7 +42,7 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function f:PLAYER_XP_UPDATE()
+function ns.PLAYER_XP_UPDATE()
 	if IsXPUserDisabled() then
 		dataobj.text = "(×_×)"
 	else
@@ -53,7 +53,7 @@ function f:PLAYER_XP_UPDATE()
 end
 
 
-function f:PLAYER_LEVEL_UP()
+function ns.PLAYER_LEVEL_UP()
 	start = start - max
 end
 
@@ -88,5 +88,3 @@ function dataobj.OnEnter(self)
 
 	GameTooltip:Show()
 end
-
-if IsLoggedIn() then f:PLAYER_LOGIN() else f:RegisterEvent("PLAYER_LOGIN") end

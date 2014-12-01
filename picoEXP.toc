@@ -16,5 +16,7 @@ CallbackHandler-1.0.lua
 LibDataBroker-1.1\LibDataBroker-1.1.lua
 tekBlock\tekBlock.lua
 
+externals\events.lua
+
 Locale.lua
 picoEXP.lua
