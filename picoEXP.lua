@@ -26,6 +26,13 @@ local dataobj = LDB:NewDataObject("picoEXP", {
 ----------------------
 
 
+local function ResetStats()
+	start, max, starttime = UnitXP("player"), UnitXPMax("player"), GetTime()
+	cur = start
+	startlevel = UnitLevel("player") + start/max
+end
+
+
 function ns.OnLogin()
 	start, max, starttime = UnitXP("player"), UnitXPMax("player"), GetTime()
 	cur = start
@@ -73,6 +80,7 @@ local function GetTipAnchor(frame)
 end
 
 
+dataobj.OnClick = ResetStats
 function dataobj.OnLeave() GameTooltip:Hide() end
 function dataobj.OnEnter(self)
  	GameTooltip:SetOwner(self, "ANCHOR_NONE")
