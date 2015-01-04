@@ -93,12 +93,30 @@ function dataobj.OnEnter(self)
 		GameTooltip:AddLine("Experience gain is currently disabled", 1,0.125,0.125)
 	end
 
-	GameTooltip:AddDoubleLine(L["EXP:"], cur.."/"..max, nil,nil,nil, 1,1,1)
-	GameTooltip:AddDoubleLine(L["Rest:"], string.format("%d%%", (GetXPExhaustion() or 0)/max*100), nil,nil,nil, 1,1,1)
-	GameTooltip:AddDoubleLine(L["TNL:"], max-cur, nil,nil,nil, 1,1,1)
-	GameTooltip:AddLine(string.format(L["%.2f hours played this session"], (GetTime()-starttime)/3600), 1,1,1)
-	GameTooltip:AddLine((cur - start)..L[" EXP gained this session"], 1,1,1)
+	local hours = (GetTime()-starttime)/3600
+	local gain = cur - start
+	local rate = gain / hours
+	local tnl = max - cur
+	local hourstnl = tnl / rate
+
+	local expstr = string.format("%.1fk/%.1fk", cur/1000, max/1000)
+	local reststr = string.format("%d%%", (GetXPExhaustion() or 0)/max*100)
+	local ratestr = string.format("%.1fk EXP per hour", rate/1000)
+
+	local tnlstr
+	if hourstnl <= 1.5 then
+		tnlstr = string.format("%.01fk (%d minutes)", tnl/1000, hourstnl*60)
+	else
+		tnlstr = string.format("%.01fk (%.02f hours)", tnl/1000, hourstnl)
+	end
+
+	GameTooltip:AddDoubleLine(L["EXP:"], expstr, nil,nil,nil, 1,1,1)
+	GameTooltip:AddDoubleLine(L["Rest:"], reststr, nil,nil,nil, 1,1,1)
+	GameTooltip:AddDoubleLine(L["TNL:"], tnlstr, nil,nil,nil, 1,1,1)
+	GameTooltip:AddLine(string.format(L["%.2f hours played this session"], hours), 1,1,1)
+	GameTooltip:AddLine(gain ..L[" EXP gained this session"], 1,1,1)
 	GameTooltip:AddLine(string.format(L["%.2f levels gained this session"], UnitLevel("player") + cur/max - startlevel), 1,1,1)
+	GameTooltip:AddLine(ratestr, 1,1,1)
 
 	GameTooltip:Show()
 end
